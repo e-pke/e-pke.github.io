@@ -1,0 +1,266 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#111111">
+  <meta name="description" content="Links e projetos de Gustavo Jerke.">
+  <title>Gustavo Jerke | Links</title>
+  <link rel="icon" type="image/x-icon" href="./favicon.ico">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #111111;
+      --surface: #191919;
+      --surface-hover: #202020;
+      --border: #333333;
+      --fg: #e8ebef;
+      --muted: #a7adb6;
+      --quiet: #7f8790;
+      --cyan: #84b2c3;
+      --blue: #81a1c1;
+      --green: #a3be8c;
+      --purple: #b48ead;
+      --font: "JetBrains Mono", ui-monospace, SFMono-Regular, Consolas, monospace;
+    }
+
+    * { box-sizing: border-box; }
+    html { min-height: 100%; }
+    body {
+      min-height: 100vh;
+      min-height: 100dvh;
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+      display: grid;
+      place-items: center;
+      padding: 64px 18px 38px;
+    }
+    ::selection { background: #545454; color: var(--fg); }
+    a { color: inherit; text-decoration: none; }
+    a:focus-visible { outline: 2px solid var(--cyan); outline-offset: 4px; }
+
+    .page { width: min(100%, 450px); }
+    .profile { text-align: center; margin-bottom: 43px; }
+    .avatar-frame {
+      position: relative;
+      display: grid;
+      place-items: center;
+      width: 118px;
+      height: 118px;
+      margin: 0 auto 25px;
+      padding: 5px;
+      border: 1px solid var(--border);
+      background: #191919;
+      border-radius: 50%;
+    }
+    .avatar {
+      width: 100%; height: 100%; object-fit: cover;
+      display: block; border-radius: 50%;
+      background: #191919;
+      color: transparent;
+    }
+    .avatar-fallback {
+      position: absolute; inset: 5px;
+      display: grid; place-items: center;
+      border-radius: 50%;
+      background: #191919;
+      color: var(--cyan);
+      font-weight: 800;
+      font-size: 32px;
+      z-index: -1;
+    }
+    .avatar-frame.avatar-error .avatar { display: none; }
+    .avatar-frame.avatar-error .avatar-fallback { z-index: 0; }
+    .avatar-frame::after {
+      content: "";
+      position: absolute;
+      right: 7px; bottom: 6px;
+      width: 13px; height: 13px;
+      background: var(--green);
+      border: 4px solid var(--bg);
+      border-radius: 50%;
+      box-sizing: content-box;
+    }
+
+    .name { margin: 0; font-size: clamp(29px, 7vw, 36px); font-weight: 800; line-height: 1.2; letter-spacing: -1.5px; }
+    .name .dot { color: var(--cyan); }
+    .role { margin: 11px 0 0; color: var(--muted); font-size: 12px; line-height: 1.7; font-weight: 500; }
+
+    .section-label {
+      color: var(--quiet);
+      font-size: 10px;
+      line-height: 1;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      margin: 0 0 17px;
+      display: flex;
+      align-items: center;
+      gap: 11px;
+    }
+    .section-label::before { content: ""; width: 7px; height: 7px; border: 1px solid var(--cyan); transform: rotate(45deg); }
+    .section-label::after { content: ""; height: 1px; background: var(--border); opacity: .65; flex: 1; }
+    .links { display: grid; gap: 12px; }
+    .link {
+      min-height: 75px;
+      padding: 14px 18px 14px 15px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      background: var(--surface);
+      transition: background .18s ease, border-color .18s ease, transform .18s ease;
+    }
+    .link[href]:hover { background: var(--surface-hover); border-color: var(--cyan); transform: translateY(-2px); }
+    .link-icon {
+      width: 44px; height: 44px;
+      flex: 0 0 44px;
+      display: grid; place-items: center;
+      border: 1px solid #303030;
+      border-radius: 11px;
+      background: #151515;
+    }
+    .link-icon svg { width: 22px; height: 22px; display: block; }
+    .linkedin .link-icon { color: var(--cyan); }
+    .github .link-icon { color: #d8dee9; }
+    .hackthebox .link-icon { color: var(--green); }
+    .curriculum .link-icon { color: var(--blue); }
+    .ctfterm .link-icon { color: var(--purple); }
+    .link-content { flex: 1; min-width: 0; }
+    .link-title { display: block; font-weight: 700; font-size: 13px; letter-spacing: -.2px; }
+    .link-description { display: block; color: var(--muted); font-size: 10px; line-height: 1.55; margin-top: 4px; }
+    .link-arrow { color: var(--quiet); flex: 0 0 auto; display: grid; place-items: center; transition: transform .18s ease, color .18s ease; }
+    .link-arrow svg { width: 19px; height: 19px; }
+    .link[href]:hover .link-arrow { color: var(--cyan); transform: translate(2px,-2px); }
+    .link.is-unconfigured { opacity: .57; cursor: not-allowed; }
+    .link.is-unconfigured .link-arrow { display: none; }
+
+    footer {
+      text-align: center;
+      color: var(--quiet);
+      font-size: 10px;
+      line-height: 1.8;
+      margin-top: 37px;
+    }
+    footer .footer-accent { color: var(--cyan); }
+    @media (max-width: 440px) {
+      body { padding: 44px 16px 26px; }
+      .profile { margin-bottom: 35px; }
+      .avatar-frame { width: 110px; height: 110px; margin-bottom: 22px; }
+      .link { min-height: 71px; padding-right: 15px; gap: 13px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .link, .link-arrow { transition: none; }
+      .link[href]:hover { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="profile">
+      <div class="avatar-frame" id="avatarFrame">
+        <!-- Avatar público do GitHub; é atualizado automaticamente quando você troca sua foto lá. -->
+        <img class="avatar" id="avatar" src="https://github.com/e-pke.png" alt="Avatar do perfil no GitHub" width="108" height="108" referrerpolicy="no-referrer">
+        <span class="avatar-fallback" aria-hidden="true">Є</span>
+      </div>
+      <h1 class="name"><span id="displayName">Gustavo Jerke</span><span class="dot">.</span></h1>
+      <p class="role" id="displayRole">Cybersecurity · Pentesting</p>
+    </header>
+
+    <nav aria-label="Links sociais e projetos">
+      <p class="section-label">CONNECT / EXPLORE</p>
+      <div class="links">
+        <a class="link linkedin" data-link="linkedin" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+          <span class="link-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.45 2H3.55C2.69 2 2 2.68 2 3.52v16.96c0 .84.69 1.52 1.55 1.52h16.9c.86 0 1.55-.68 1.55-1.52V3.52c0-.84-.69-1.52-1.55-1.52ZM7.93 18.75H4.98V9.2h2.95v9.55ZM6.45 7.9a1.71 1.71 0 1 1 0-3.42 1.71 1.71 0 0 1 0 3.42Zm12.3 10.85H15.8V14.1c0-1.11-.02-2.54-1.55-2.54-1.55 0-1.79 1.21-1.79 2.46v4.73H9.52V9.2h2.83v1.3h.04c.4-.75 1.36-1.54 2.8-1.54 3 0 3.56 1.97 3.56 4.52v5.27Z"/></svg>
+          </span>
+          <span class="link-content"><span class="link-title">LinkedIn</span><span class="link-description">Perfil profissional</span></span>
+          <span class="link-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+        </a>
+
+        <a class="link github" data-link="github" target="_blank" rel="noopener noreferrer" aria-label="GitHub">
+          <span class="link-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 19c-4.3 1.35-4.3-2.4-6-3m12 6v-3.4a3 3 0 0 0-.84-2.34c2.8-.31 5.74-1.37 5.74-6.2a4.83 4.83 0 0 0-1.3-3.35 4.48 4.48 0 0 0-.08-3.3S17.44 2.9 15 4.8a11.23 11.23 0 0 0-6 0C6.56 2.9 5.48 3.11 5.48 3.11a4.48 4.48 0 0 0-.08 3.3A4.83 4.83 0 0 0 4.1 9.76c0 4.82 2.94 5.88 5.74 6.2A3 3 0 0 0 9 18.3V22"/></svg>
+          </span>
+          <span class="link-content"><span class="link-title">GitHub</span><span class="link-description">Código e projetos open source</span></span>
+          <span class="link-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+        </a>
+
+        <a class="link hackthebox" data-link="hackthebox" target="_blank" rel="noopener noreferrer" aria-label="Hack The Box">
+          <span class="link-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.65" stroke-linecap="round" stroke-linejoin="round"><path d="m12 2 9 5v10l-9 5-9-5V7l9-5Z"/><path d="m3 7 9 5 9-5M12 12v10"/><path d="m7.5 4.5 9 5"/></svg>
+          </span>
+          <span class="link-content"><span class="link-title">Hack The Box</span><span class="link-description">Labs e desafios de segurança</span></span>
+          <span class="link-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+        </a>
+
+        <a class="link curriculum" data-link="curriculum" href="./curriculum/" aria-label="Curriculum">
+          <span class="link-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><path d="M14 2v6h6M8 13h8M8 17h6"/></svg>
+          </span>
+          <span class="link-content"><span class="link-title">Curriculum</span><span class="link-description">Currículo profissional</span></span>
+          <span class="link-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg></span>
+        </a>
+
+        <a class="link ctfterm" data-link="ctfterm" target="_blank" rel="noopener noreferrer" aria-label="CTF.Term">
+          <span class="link-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="2.5" y="3" width="19" height="18" rx="3"/><path d="m7 9 3 3-3 3m6 0h4"/></svg>
+          </span>
+          <span class="link-content"><span class="link-title">CTF.Term</span><span class="link-description">Meu toolkit de pentest</span></span>
+          <span class="link-arrow" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17 17 7M8 7h9v9"/></svg></span>
+        </a>
+      </div>
+    </nav>
+    <footer>made with <span class="footer-accent">Nord</span> · <span id="footerName">Єpke</span></footer>
+  </main>
+
+  <script>
+    // ─────────────────────────────────────────────────────────────
+    // PERSONALIZE AQUI: nome, cargo e URLs dos seus perfis.
+    // Os botões sem URL ficam visíveis, porém desabilitados.
+    // ─────────────────────────────────────────────────────────────
+    const PROFILE = {
+      name: 'Gustavo Jerke',
+      role: 'Cybersecurity · Pentesting',
+      github: 'https://github.com/e-pke',
+      linkedin: 'https://www.linkedin.com/in/gustavojerke/',
+      hackthebox: 'https://app.hackthebox.com/users/3398496',
+      curriculum: './curriculum/', // Página interna do mesmo GitHub Pages
+      ctfterm: 'https://e-pke.github.io/ctf-term/'
+    };
+
+    document.getElementById('displayName').textContent = PROFILE.name;
+    document.getElementById('displayRole').textContent = PROFILE.role;
+    document.getElementById('footerName').textContent = PROFILE.name;
+    document.title = `${PROFILE.name} | Links`;
+
+    document.querySelectorAll('[data-link]').forEach(link => {
+      const url = PROFILE[link.dataset.link];
+      if (typeof url === 'string' && (/^https:\/\//i.test(url.trim()) || /^\.\/[a-z0-9/_-]+\/?$/i.test(url.trim()))) {
+        link.href = url.trim();
+        if (link.dataset.link === 'curriculum') {
+          link.removeAttribute('target'); // Navegação interna na mesma aba
+          link.removeAttribute('rel');
+        }
+      } else {
+        link.classList.add('is-unconfigured');
+        link.removeAttribute('href');
+        link.removeAttribute('target');
+        link.setAttribute('aria-disabled', 'true');
+        link.setAttribute('title', 'Adicione o endereço deste perfil na seção PROFILE do HTML.');
+      }
+    });
+
+    const avatar = document.getElementById('avatar');
+    avatar.addEventListener('error', () => document.getElementById('avatarFrame').classList.add('avatar-error'));
+    if (avatar.complete && avatar.naturalWidth === 0) document.getElementById('avatarFrame').classList.add('avatar-error');
+  </script>
+</body>
+</html>
